@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@techcorp.com",
+    "phone": "(555) 123-4567",
+    "company": "TechCorp Solutions",
+    "position": "VP of Sales",
+    "tags": ["decision-maker", "enterprise", "hot-lead"],
+    "createdAt": "2024-01-15T08:30:00Z",
+    "updatedAt": "2024-01-15T08:30:00Z"
+  },
+  {
+    "Id": 2,
+    "name": "Michael Chen",
+    "email": "m.chen@innovatetech.io",
+    "phone": "(555) 987-6543",
+    "company": "InnovateTech",
+    "position": "CTO",
+    "tags": ["technical", "startup", "warm-lead"],
+    "createdAt": "2024-01-12T14:20:00Z",
+    "updatedAt": "2024-01-12T14:20:00Z"
+  },
+  {
+    "Id": 3,
+    "name": "Emily Rodriguez",
+    "email": "emily.r@globalenterprises.com",
+    "phone": "(555) 456-7890",
+    "company": "Global Enterprises",
+    "position": "Director of Operations",
+    "tags": ["operations", "enterprise", "qualified"],
+    "createdAt": "2024-01-10T11:45:00Z",
+    "updatedAt": "2024-01-10T11:45:00Z"
+  },
+  {
+    "Id": 4,
+    "name": "David Thompson",
+    "email": "david.thompson@brightfuture.org",
+    "phone": "(555) 321-0987",
+    "company": "Bright Future Inc",
+    "position": "Marketing Manager",
+    "tags": ["marketing", "mid-market", "new"],
+    "createdAt": "2024-01-08T09:15:00Z",
+    "updatedAt": "2024-01-08T09:15:00Z"
+  },
+  {
+    "Id": 5,
+    "name": "Lisa Wang",
+    "email": "lisa.wang@nexusventures.com",
+    "phone": "(555) 654-3210",
+    "company": "Nexus Ventures",
+    "position": "Partner",
+    "tags": ["investor", "high-value", "champion"],
+    "createdAt": "2024-01-05T16:30:00Z",
+    "updatedAt": "2024-01-05T16:30:00Z"
+  },
+  {
+    "Id": 6,
+    "name": "Robert Martinez",
+    "email": "r.martinez@alphatech.net",
+    "phone": "(555) 789-0123",
+    "company": "Alpha Technologies",
+    "position": "IT Director",
+    "tags": ["technical", "enterprise", "evaluating"],
+    "createdAt": "2024-01-03T13:20:00Z",
+    "updatedAt": "2024-01-03T13:20:00Z"
+  },
+  {
+    "Id": 7,
+    "name": "Jennifer Kim",
+    "email": "jennifer.kim@dynamicsoftware.com",
+    "phone": "(555) 234-5678",
+    "company": "Dynamic Software",
+    "position": "Product Manager",
+    "tags": ["product", "saas", "competitor"],
+    "createdAt": "2024-01-01T10:00:00Z",
+    "updatedAt": "2024-01-01T10:00:00Z"
+  },
+  {
+    "Id": 8,
+    "name": "Mark Anderson",
+    "email": "mark.anderson@futureflow.com",
+    "phone": "(555) 567-8901",
+    "company": "FutureFlow Systems",
+    "position": "CEO",
+    "tags": ["ceo", "decision-maker", "interested"],
+    "createdAt": "2023-12-28T15:45:00Z",
+    "updatedAt": "2023-12-28T15:45:00Z"
+  }
+]
