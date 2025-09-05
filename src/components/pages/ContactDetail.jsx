@@ -249,9 +249,10 @@ const tabs = [
                     </div>
                     <div className="text-sm text-gray-600">Total Value</div>
                   </div>
-                </div>
+</div>
               </div>
-            )}
+            </div>
+          )}
 
             {activeTab === "tasks" && (
               <TaskWidget contactId={parseInt(id)} />
@@ -317,14 +318,7 @@ const tabs = [
                 </div>
               )}
             </div>
-          )}
-
-          {activeTab === "activities" && (
-            <ActivitiesTimeline
-              contactId={parseInt(id)}
-              onAddActivity={() => setIsAddActivityModalOpen(true)}
-            />
-          )}
+)}
         </div>
       </div>
 
