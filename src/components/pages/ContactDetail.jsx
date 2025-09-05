@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
-import ApperIcon from "@/components/ApperIcon";
-import Badge from "@/components/atoms/Badge";
-import Button from "@/components/atoms/Button";
-import Modal from "@/components/molecules/Modal";
-import ContactForm from "@/components/organisms/ContactForm";
-import ActivitiesTimeline from "@/components/organisms/ActivitiesTimeline";
-import ActivityForm from "@/components/organisms/ActivityForm";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
+import TaskWidget from "@/components/organisms/TaskWidget";
 import { contactService } from "@/services/api/contactService";
 import { dealService } from "@/services/api/dealService";
 import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import ContactForm from "@/components/organisms/ContactForm";
+import ActivitiesTimeline from "@/components/organisms/ActivitiesTimeline";
+import ActivityForm from "@/components/organisms/ActivityForm";
+import Modal from "@/components/molecules/Modal";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import Deals from "@/components/pages/Deals";
+import Activities from "@/components/pages/Activities";
+import Badge from "@/components/atoms/Badge";
+import Button from "@/components/atoms/Button";
 
 const ContactDetail = () => {
   const { id } = useParams();
@@ -93,9 +96,10 @@ const ContactDetail = () => {
     return colors[stage] || "default";
   };
 
-  const tabs = [
+const tabs = [
     { id: "details", label: "Details", icon: "User" },
     { id: "deals", label: "Deals", icon: "Target" },
+    { id: "tasks", label: "Tasks", icon: "CheckSquare" },
     { id: "activities", label: "Activities", icon: "Calendar" }
   ];
 
@@ -228,7 +232,7 @@ const ContactDetail = () => {
                     <dd className="text-sm text-gray-900 mt-1">{contact.position}</dd>
                   </div>
                 </dl>
-              </div>
+</div>
 
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Summary</h3>
@@ -247,8 +251,31 @@ const ContactDetail = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {activeTab === "tasks" && (
+              <TaskWidget contactId={parseInt(id)} />
+            )}
+
+            {activeTab === "activities" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900">Recent Activities</h3>
+                  <Button 
+                    onClick={() => setIsAddActivityModalOpen(true)}
+                    size="sm"
+                  >
+                    <ApperIcon name="Plus" size={16} className="mr-2" />
+                    Add Activity
+                  </Button>
+                </div>
+                
+                <ActivitiesTimeline 
+                  contactId={parseInt(id)}
+                  onAddActivity={() => setIsAddActivityModalOpen(true)}
+/>
+              </div>
+            )}
 
           {activeTab === "deals" && (
             <div className="space-y-4">
