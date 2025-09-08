@@ -10,12 +10,12 @@ import Loading from "@/components/ui/Loading";
 import Modal from "@/components/molecules/Modal";
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
+import CommentsSection from "@/components/organisms/CommentsSection";
 import ContactForm from "@/components/organisms/ContactForm";
 import ActivityForm from "@/components/organisms/ActivityForm";
 import ActivitiesTimeline from "@/components/organisms/ActivitiesTimeline";
 import TaskWidget from "@/components/organisms/TaskWidget";
 import DealForm from "@/components/organisms/DealForm";
-import CommentsSection from "@/components/organisms/CommentsSection";
 import Activities from "@/components/pages/Activities";
 import Deals from "@/components/pages/Deals";
 
@@ -218,59 +218,6 @@ const tabs = [
               >
                 <ApperIcon name={tab.icon} size={16} />
                 <span>{tab.label}</span>
-                {tab.id === "deals" && deals.length > 0 && (
-                  <Badge variant="primary" size="sm">
-                    {deals.length}
-                  </Badge>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <Button
-              onClick={() => setIsAddActivityModalOpen(true)}
-              variant="outline"
-              className="bg-gradient-to-r from-success/10 to-emerald-500/10 border-success/20 text-success hover:from-success hover:to-emerald-500 hover:text-white"
-            >
-              <ApperIcon name="Plus" size={16} className="mr-2" />
-              Add Activity
-            </Button>
-            
-            <Button
-              onClick={() => setIsEditModalOpen(true)}
-              variant="outline"
-            >
-              <ApperIcon name="Edit" size={16} className="mr-2" />
-              Edit
-            </Button>
-            
-            <Button
-              onClick={handleDeleteContact}
-              variant="outline"
-              className="text-error border-error/20 hover:bg-error hover:text-white"
-            >
-              <ApperIcon name="Trash2" size={16} />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8 px-6">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
-                  activeTab === tab.id
-                    ? "border-primary text-primary"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                <ApperIcon name={tab.icon} size={16} />
-                <span>{tab.label}</span>
 {tab.id === "deals" && deals.length > 0 && (
                   <Badge variant="primary" size="sm">
                     {deals.length}
@@ -337,11 +284,10 @@ const tabs = [
                     <div className="text-sm text-gray-600">Comments</div>
                   </div>
                 </div>
-              </div>
-              </div>
+</div>
             </div>
-          )}
-
+          </div>
+        )}
             {activeTab === "tasks" && (
               <TaskWidget contactId={parseInt(id)} />
             )}
