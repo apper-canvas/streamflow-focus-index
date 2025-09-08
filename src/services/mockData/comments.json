@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 1,
+    "contactId": 1,
+    "author": "Sales Rep",
+    "content": "Sarah is very interested in our enterprise solution. She mentioned they're looking to scale their operations significantly in Q2.",
+    "timestamp": "2024-01-15T15:30:00Z",
+    "edited": false
+  },
+  {
+    "Id": 2,
+    "contactId": 1,
+    "author": "Account Manager",
+    "content": "Follow-up meeting scheduled for next week. She wants to bring in the technical team to discuss integration requirements.",
+    "timestamp": "2024-01-16T09:15:00Z",
+    "edited": false
+  },
+  {
+    "Id": 3,
+    "contactId": 2,
+    "author": "Sales Rep",
+    "content": "Michael is very technical and asked detailed questions about our API capabilities. Sent him the developer documentation.",
+    "timestamp": "2024-01-12T16:45:00Z",
+    "edited": false
+  },
+  {
+    "Id": 4,
+    "contactId": 2,
+    "author": "Technical Consultant",
+    "content": "Had a great technical discussion. He's impressed with our scaling capabilities and security features.",
+    "timestamp": "2024-01-13T11:20:00Z",
+    "edited": false
+  },
+  {
+    "Id": 5,
+    "contactId": 3,
+    "author": "Sales Rep", 
+    "content": "Emily is focused on operational efficiency. Highlighted our workflow automation features during the demo.",
+    "timestamp": "2024-01-10T14:30:00Z",
+    "edited": false
+  },
+  {
+    "Id": 6,
+    "contactId": 4,
+    "author": "Marketing Specialist",
+    "content": "David is interested in our marketing automation features. Scheduled a demo focused on campaign management.",
+    "timestamp": "2024-01-08T10:45:00Z",
+    "edited": false
+  },
+  {
+    "Id": 7,
+    "contactId": 5,
+    "author": "Sales Director",
+    "content": "Lisa is a key investor contact. She's very influential in the VC space and could provide valuable introductions.",
+    "timestamp": "2024-01-05T17:15:00Z",
+    "edited": false
+  },
+  {
+    "Id": 8,
+    "contactId": 6,
+    "author": "Technical Consultant",
+    "content": "Robert has strict security requirements. Need to prepare detailed security documentation for next meeting.",
+    "timestamp": "2024-01-03T15:20:00Z",
+    "edited": false
+  },
+  {
+    "Id": 9,
+    "contactId": 7,
+    "author": "Sales Rep",
+    "content": "Jennifer mentioned they're evaluating multiple solutions. Need to emphasize our competitive advantages.",
+    "timestamp": "2024-01-01T12:30:00Z",
+    "edited": false
+  },
+  {
+    "Id": 10,
+    "contactId": 8,
+    "author": "Account Executive",
+    "content": "Mark is the final decision maker. Very positive about our solution but wants to see ROI projections.",
+    "timestamp": "2023-12-28T16:30:00Z",
+    "edited": false
+  }
+]

@@ -15,6 +15,7 @@ import ActivityForm from "@/components/organisms/ActivityForm";
 import ActivitiesTimeline from "@/components/organisms/ActivitiesTimeline";
 import TaskWidget from "@/components/organisms/TaskWidget";
 import DealForm from "@/components/organisms/DealForm";
+import CommentsSection from "@/components/organisms/CommentsSection";
 import Activities from "@/components/pages/Activities";
 import Deals from "@/components/pages/Deals";
 
@@ -30,6 +31,7 @@ const ContactDetail = () => {
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 const [contactDeals, setContactDeals] = useState([]);
+  const [comments, setComments] = useState([]);
   const [isAddDealModalOpen, setIsAddDealModalOpen] = useState(false);
   const [isEditDealModalOpen, setIsEditDealModalOpen] = useState(false);
   const [editingDeal, setEditingDeal] = useState(null);
@@ -38,15 +40,18 @@ const [contactDeals, setContactDeals] = useState([]);
       setLoading(true);
       setError("");
       
-      const [contactData, allDeals] = await Promise.all([
+const [contactData, allDeals, commentService] = await Promise.all([
         contactService.getById(parseInt(id)),
-        dealService.getAll()
+        dealService.getAll(),
+        import('@/services/api/commentService').then(m => m.commentService)
       ]);
       
       const contactDeals = allDeals.filter(deal => deal.contactId === parseInt(id));
+      const contactComments = await commentService.getByContactId(parseInt(id));
       
       setContact(contactData);
       setDeals(contactDeals);
+      setComments(contactComments);
     } catch (err) {
       setError("Failed to load contact details. Please try again.");
     } finally {
@@ -80,10 +85,14 @@ const [contactDeals, setContactDeals] = useState([]);
     }
   };
 
-  const handleDealSuccess = () => {
+const handleDealSuccess = () => {
     setIsAddDealModalOpen(false);
     setIsEditDealModalOpen(false);
     setEditingDeal(null);
+    loadContactData();
+  };
+
+  const handleCommentsUpdate = () => {
     loadContactData();
   };
 
@@ -123,7 +132,8 @@ const tabs = [
     { id: "details", label: "Details", icon: "User" },
     { id: "deals", label: "Deals", icon: "Target" },
     { id: "tasks", label: "Tasks", icon: "CheckSquare" },
-    { id: "activities", label: "Activities", icon: "Calendar" }
+    { id: "activities", label: "Activities", icon: "Activity" },
+    { id: "comments", label: "Comments", icon: "MessageSquare" },
   ];
 
   if (loading) return <Loading />;
@@ -157,19 +167,9 @@ const tabs = [
                 </div>
                 <div className="flex items-center">
                   <ApperIcon name="Calendar" size={16} className="mr-2" />
-                  Added {format(new Date(contact.createdAt), "MMM dd, yyyy")}
+                  Created {format(new Date(contact.createdAt), 'MMM dd, yyyy')}
                 </div>
               </div>
-
-              {contact.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {contact.tags.map((tag, index) => (
-                    <Badge key={index} variant="primary" size="sm">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
@@ -222,6 +222,64 @@ const tabs = [
                   <Badge variant="primary" size="sm">
                     {deals.length}
                   </Badge>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <Button
+              onClick={() => setIsAddActivityModalOpen(true)}
+              variant="outline"
+              className="bg-gradient-to-r from-success/10 to-emerald-500/10 border-success/20 text-success hover:from-success hover:to-emerald-500 hover:text-white"
+            >
+              <ApperIcon name="Plus" size={16} className="mr-2" />
+              Add Activity
+            </Button>
+            
+            <Button
+              onClick={() => setIsEditModalOpen(true)}
+              variant="outline"
+            >
+              <ApperIcon name="Edit" size={16} className="mr-2" />
+              Edit
+            </Button>
+            
+            <Button
+              onClick={handleDeleteContact}
+              variant="outline"
+              className="text-error border-error/20 hover:bg-error hover:text-white"
+            >
+              <ApperIcon name="Trash2" size={16} />
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
+        <div className="border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8 px-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
+                  activeTab === tab.id
+                    ? "border-primary text-primary"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                <ApperIcon name={tab.icon} size={16} />
+                <span>{tab.label}</span>
+{tab.id === "deals" && deals.length > 0 && (
+                  <Badge variant="primary" size="sm">
+                    {deals.length}
+                  </Badge>
+                )}
+                {tab.id === "comments" && comments.length > 0 && (
+                  <Badge variant="primary" size="sm">
+                    {comments.length}
+                  </Badge>
                 )}
               </button>
             ))}
@@ -260,19 +318,26 @@ const tabs = [
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Summary</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-4">
+                  <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-primary">
                       {deals.length}
                     </div>
                     <div className="text-sm text-gray-600">Total Deals</div>
                   </div>
-                  <div className="bg-gradient-to-br from-success/10 to-emerald-500/10 rounded-lg p-4">
+                  <div className="bg-gradient-to-br from-success/10 to-emerald-500/10 rounded-lg p-4 text-center">
                     <div className="text-2xl font-bold text-success">
                       {formatCurrency(deals.reduce((sum, deal) => sum + deal.value, 0))}
                     </div>
                     <div className="text-sm text-gray-600">Total Value</div>
                   </div>
-</div>
+                  <div className="bg-gradient-to-br from-info/10 to-blue-500/10 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-info">
+                      {comments.length}
+                    </div>
+                    <div className="text-sm text-gray-600">Comments</div>
+                  </div>
+                </div>
+              </div>
               </div>
             </div>
           )}
@@ -367,6 +432,15 @@ const tabs = [
               )}
             </div>
           )}
+
+          {activeTab === "comments" && (
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900">Comments</h3>
+              </div>
+              <CommentsSection contactId={contact?.Id} onUpdate={handleCommentsUpdate} />
+            </div>
+          )}
         </div>
       </div>
 
@@ -397,7 +471,7 @@ const tabs = [
         />
       </Modal>
 
-      {/* Deal Modals */}
+{/* Deal Modals */}
       <Modal
         isOpen={isAddDealModalOpen}
         onClose={() => setIsAddDealModalOpen(false)}
