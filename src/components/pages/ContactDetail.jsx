@@ -29,8 +29,8 @@ const ContactDetail = () => {
   const [activeTab, setActiveTab] = useState("details");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
-const [contactDeals, setContactDeals] = useState([]);
+const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [contactDeals, setContactDeals] = useState([]);
   const [comments, setComments] = useState([]);
   const [isAddDealModalOpen, setIsAddDealModalOpen] = useState(false);
   const [isEditDealModalOpen, setIsEditDealModalOpen] = useState(false);
@@ -217,8 +217,8 @@ const tabs = [
                 }`}
               >
                 <ApperIcon name={tab.icon} size={16} />
-                <span>{tab.label}</span>
-{tab.id === "deals" && deals.length > 0 && (
+<span>{tab.label}</span>
+                {tab.id === "deals" && deals.length > 0 && (
                   <Badge variant="primary" size="sm">
                     {deals.length}
                   </Badge>
@@ -257,11 +257,10 @@ const tabs = [
                   </div>
                   <div>
                     <dt className="text-sm font-medium text-gray-500">Position</dt>
-                    <dd className="text-sm text-gray-900 mt-1">{contact.position}</dd>
+<dd className="text-sm text-gray-900 mt-1">{contact.position}</dd>
                   </div>
                 </dl>
-</div>
-
+              </div>
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Summary</h3>
                 <div className="grid grid-cols-2 gap-4">
@@ -281,17 +280,16 @@ const tabs = [
                     <div className="text-2xl font-bold text-info">
                       {comments.length}
                     </div>
-                    <div className="text-sm text-gray-600">Comments</div>
+<div className="text-sm text-gray-600">Comments</div>
                   </div>
                 </div>
-</div>
+              </div>
             </div>
-          </div>
-        )}
-            {activeTab === "tasks" && (
-              <TaskWidget contactId={parseInt(id)} />
-            )}
+          )}
 
+          {activeTab === "tasks" && (
+            <TaskWidget contactId={parseInt(id)} />
+          )}
             {activeTab === "activities" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -307,12 +305,12 @@ const tabs = [
                 
                 <ActivitiesTimeline 
                   contactId={parseInt(id)}
-                  onAddActivity={() => setIsAddActivityModalOpen(true)}
-/>
+onAddActivity={() => setIsAddActivityModalOpen(true)}
+                />
               </div>
             )}
 
-{activeTab === "deals" && (
+          {activeTab === "deals" && (
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-medium text-gray-900">Deals</h3>
@@ -414,10 +412,10 @@ const tabs = [
           contactId={parseInt(id)}
           onSuccess={handleAddActivitySuccess}
           onCancel={() => setIsAddActivityModalOpen(false)}
-        />
+/>
       </Modal>
 
-{/* Deal Modals */}
+      {/* Deal Modals */}
       <Modal
         isOpen={isAddDealModalOpen}
         onClose={() => setIsAddDealModalOpen(false)}
