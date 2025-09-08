@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
-import TaskWidget from "@/components/organisms/TaskWidget";
 import { contactService } from "@/services/api/contactService";
 import { dealService } from "@/services/api/dealService";
 import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
-import ContactForm from "@/components/organisms/ContactForm";
-import ActivitiesTimeline from "@/components/organisms/ActivitiesTimeline";
-import ActivityForm from "@/components/organisms/ActivityForm";
-import Modal from "@/components/molecules/Modal";
 import Error from "@/components/ui/Error";
 import Loading from "@/components/ui/Loading";
-import Deals from "@/components/pages/Deals";
-import Activities from "@/components/pages/Activities";
+import Modal from "@/components/molecules/Modal";
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
+import ContactForm from "@/components/organisms/ContactForm";
+import ActivityForm from "@/components/organisms/ActivityForm";
+import ActivitiesTimeline from "@/components/organisms/ActivitiesTimeline";
+import TaskWidget from "@/components/organisms/TaskWidget";
+import DealForm from "@/components/organisms/DealForm";
+import Activities from "@/components/pages/Activities";
+import Deals from "@/components/pages/Deals";
 
 const ContactDetail = () => {
   const { id } = useParams();
@@ -28,7 +29,10 @@ const ContactDetail = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-
+const [contactDeals, setContactDeals] = useState([]);
+  const [isAddDealModalOpen, setIsAddDealModalOpen] = useState(false);
+  const [isEditDealModalOpen, setIsEditDealModalOpen] = useState(false);
+  const [editingDeal, setEditingDeal] = useState(null);
   const loadContactData = async () => {
     try {
       setLoading(true);
@@ -62,6 +66,25 @@ const ContactDetail = () => {
   const handleAddActivitySuccess = () => {
     setIsAddActivityModalOpen(false);
     setRefreshTrigger(prev => prev + 1);
+};
+
+  const handleDeleteDeal = async (dealId) => {
+    if (window.confirm("Are you sure you want to delete this deal? This action cannot be undone.")) {
+      try {
+        await dealService.delete(dealId);
+        await loadContactData();
+        toast.success("Deal deleted successfully!");
+      } catch (err) {
+        toast.error("Failed to delete deal");
+      }
+    }
+  };
+
+  const handleDealSuccess = () => {
+    setIsAddDealModalOpen(false);
+    setIsEditDealModalOpen(false);
+    setEditingDeal(null);
+    loadContactData();
   };
 
   const handleDeleteContact = async () => {
@@ -278,47 +301,72 @@ const tabs = [
               </div>
             )}
 
-          {activeTab === "deals" && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
+{activeTab === "deals" && (
+            <div>
+              <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-medium text-gray-900">Deals</h3>
+                <Button
+                  onClick={() => setIsAddDealModalOpen(true)}
+                  size="sm"
+                  className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
+                >
+                  <ApperIcon name="Plus" size={16} className="mr-2" />
+                  Add Deal
+                </Button>
               </div>
-              
-              {deals.length === 0 ? (
-                <div className="text-center py-12">
-                  <ApperIcon name="Target" size={48} className="mx-auto text-gray-300 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No deals yet</h3>
-                  <p className="text-gray-500">Create a deal to start tracking opportunities with this contact.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              {deals.length > 0 ? (
+                <div className="space-y-3">
                   {deals.map((deal) => (
-                    <div key={deal.Id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div key={deal.Id} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{deal.title}</h4>
-                          <p className="text-2xl font-bold text-gray-900 mt-2">
-                            {formatCurrency(deal.value)}
-                          </p>
-                          <div className="flex items-center justify-between mt-3">
+                          <div className="flex items-center space-x-3 mb-2">
+                            <h4 className="font-medium text-gray-900">{deal.title}</h4>
                             <Badge variant={getStageColor(deal.stage)} size="sm">
-                              {deal.stage.replace("-", " ").toUpperCase()}
+                              {deal.stage.charAt(0).toUpperCase() + deal.stage.slice(1).replace('-', ' ')}
                             </Badge>
-                            <span className="text-sm text-gray-500">
-                              {deal.probability}% probability
-                            </span>
                           </div>
-                          <p className="text-xs text-gray-500 mt-2">
-                            Expected close: {format(new Date(deal.expectedCloseDate), "MMM dd, yyyy")}
-                          </p>
+                          <div className="flex items-center space-x-4 text-sm text-gray-600">
+                            <span className="font-semibold">{formatCurrency(deal.value)}</span>
+                            <span>{deal.probability}% probability</span>
+                            <span>Close: {format(new Date(deal.expectedCloseDate), 'MMM dd, yyyy')}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setEditingDeal(deal);
+                              setIsEditDealModalOpen(true);
+                            }}
+                            className="text-primary hover:text-primary hover:bg-primary/10"
+                          >
+                            <ApperIcon name="Edit2" size={16} />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteDeal(deal.Id)}
+                            className="text-error hover:text-error hover:bg-error/10"
+                          >
+                            <ApperIcon name="Trash2" size={16} />
+                          </Button>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <ApperIcon name="Target" size={32} className="mx-auto mb-3 opacity-50" />
+                  <p>No deals found for this contact</p>
+                  <p className="text-sm">Create a deal to start tracking opportunities</p>
+                </div>
               )}
             </div>
-)}
+          )}
         </div>
       </div>
 
@@ -346,6 +394,39 @@ const tabs = [
           contactId={parseInt(id)}
           onSuccess={handleAddActivitySuccess}
           onCancel={() => setIsAddActivityModalOpen(false)}
+        />
+      </Modal>
+
+      {/* Deal Modals */}
+      <Modal
+        isOpen={isAddDealModalOpen}
+        onClose={() => setIsAddDealModalOpen(false)}
+        title="Add New Deal"
+        size="lg"
+      >
+        <DealForm
+          contactId={contact?.Id}
+          onSuccess={handleDealSuccess}
+          onCancel={() => setIsAddDealModalOpen(false)}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isEditDealModalOpen}
+        onClose={() => {
+          setIsEditDealModalOpen(false);
+          setEditingDeal(null);
+        }}
+        title="Edit Deal"
+        size="lg"
+      >
+        <DealForm
+          dealId={editingDeal?.Id}
+          onSuccess={handleDealSuccess}
+          onCancel={() => {
+            setIsEditDealModalOpen(false);
+            setEditingDeal(null);
+          }}
         />
       </Modal>
     </div>

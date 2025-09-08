@@ -5,12 +5,12 @@ import { dealService } from "@/services/api/dealService";
 import { contactService } from "@/services/api/contactService";
 import { toast } from "react-toastify";
 
-const DealForm = ({ dealId = null, onSuccess, onCancel }) => {
-  const [formData, setFormData] = useState({
+const DealForm = ({ dealId = null, contactId = null, onSuccess, onCancel }) => {
+const [formData, setFormData] = useState({
     title: "",
     value: "",
     stage: "lead",
-    contactId: "",
+    contactId: contactId ? contactId.toString() : "",
     probability: "10",
     expectedCloseDate: ""
   });
