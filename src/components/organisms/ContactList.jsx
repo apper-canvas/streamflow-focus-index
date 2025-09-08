@@ -41,10 +41,10 @@ const ContactList = ({ onContactSelect, onAddContact }) => {
     if (!searchTerm) {
       setFilteredContacts(contacts);
     } else {
-      const filtered = contacts.filter(contact =>
-        contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.company.toLowerCase().includes(searchTerm.toLowerCase())
+const filtered = contacts.filter(contact =>
+        (contact.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (contact.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (contact.company || '').toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredContacts(filtered);
     }
@@ -148,13 +148,13 @@ const ContactList = ({ onContactSelect, onAddContact }) => {
                         <div className="flex-shrink-0 h-10 w-10">
                           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
                             <span className="text-sm font-medium text-primary">
-                              {contact.name.charAt(0).toUpperCase()}
+{contact.name?.charAt(0)?.toUpperCase() || '?'}
                             </span>
                           </div>
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 group-hover:text-primary transition-colors">
-                            {contact.name}
+{contact.name || 'Unnamed Contact'}
                           </div>
                           <div className="text-sm text-gray-500">{contact.email}</div>
                           <div className="text-sm text-gray-500">{contact.phone}</div>
