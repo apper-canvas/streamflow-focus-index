@@ -167,14 +167,14 @@ const filtered = contacts.filter(contact =>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex flex-wrap gap-1">
-                        {contact.tags.slice(0, 2).map((tag, index) => (
+{(contact.tags || []).slice(0, 2).map((tag, index) => (
                           <Badge key={index} variant="primary" size="sm">
                             {tag}
                           </Badge>
                         ))}
-                        {contact.tags.length > 2 && (
+                        {(contact.tags?.length || 0) > 2 && (
                           <Badge variant="default" size="sm">
-                            +{contact.tags.length - 2}
+                            +{(contact.tags?.length || 0) - 2}
                           </Badge>
                         )}
                       </div>
